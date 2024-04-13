@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+  app:
+    build:
+      context: ../
+      dockerfile: ./dockerfiles/Dockerfile
+    image: mk/celery:v1
+    container_name: app
+    volumes:
+      - ../src/:/usr/ubuntu/mk/src/
+  backend:
+    image: mysql:8.3.0
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=maverick123
+      - MYSQL_DATABASE=backend-test
+      - MYSQL_USER=joey
+      - MYSQL_PASSWORD=chandler
+    volumes:
+      - ../sql-data:/var/lib/mysql
+    ports:
+      - 3306:3306
